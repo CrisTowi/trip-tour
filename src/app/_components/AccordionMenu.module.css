@@ -1,0 +1,26 @@
+.accordionItem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accordionItemTitle {
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid #000;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.accordionItemContent {
+  border: 1px solid #000;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+
+.accordionItemClose {
+  cursor: pointer;
+}
