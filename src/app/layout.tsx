@@ -1,8 +1,6 @@
-"use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { LoadScript } from "@react-google-maps/api";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,10 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string} libraries={["places"]}>
-          {children}
-        </LoadScript>
+        {children}
       </body>
-    </html>
+    </html >
   );
 }

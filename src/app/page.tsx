@@ -1,7 +1,9 @@
-
+"use client";
 import styles from "./page.module.css";
 import Map from "./_components/Map";
 import Link from "next/link";
+import { LoadScript } from "@react-google-maps/api";
+import useSWR from "swr";
 
 const fetcher = async () => {
   return {
@@ -44,29 +46,34 @@ const fetcher = async () => {
   };
 };
 
-export default async function Home() {
-  const data = await fetcher();
+export default function Home() {
+  const { data, isLoading, error } = useSWR('tripList', fetcher);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className={styles.page}>
-      <h1>Plan your trip</h1>
-      <div>
-        {data.tripList.map((trip) => (
-          <div key={trip.id} className={styles.tripContainer}>
-            <div>
-              <h2>{trip.name}</h2>
-              <p>{trip.description}</p>
-              <Link href={`/trip/${trip.id}`}><div className={styles.viewTripButton}>View trip</div></Link>
+    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string} libraries={["places"]}>
+      <div className={styles.page}>
+        <h1>Plan your trip</h1>
+        <div>
+          {data?.tripList.map((trip) => (
+            <div key={trip.id} className={styles.tripContainer}>
+              <div>
+                <h2>{trip.name}</h2>
+                <p>{trip.description}</p>
+                <Link href={`/trip/${trip.id}`}><div className={styles.viewTripButton}>View trip</div></Link>
+              </div>
+              {/* Map of the trip */}
+              <div className={styles.mapContainer}>
+                <Map
+                  locations={trip.locationList}
+                />
+              </div>
             </div>
-            {/* Map of the trip */}
-            <div className={styles.mapContainer}>
-              <Map
-                locations={trip.locationList}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </div >
+    </LoadScript>
   );
 }
